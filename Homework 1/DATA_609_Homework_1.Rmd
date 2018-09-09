@@ -1,0 +1,289 @@
+---
+title: "DATA 609 - Homework 1"
+author: "Joshua Sturm"
+date: "September 7, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+# Chapter 1 problems
+
+## 1 (Page 8, exercise #10)
+Your grandparents have an annuity. The value of the annuity increases each month by an automatic deposit of 1\% interest on the previous month's balance. Your grandparents withdraw \$1000 at the beginning of each month for living expenses. Currently, they have \$50,000 in the annuity. Model the annuity with a dynamical system. Will the annuity run out of money? When? Hint: What value will $a_n$ have when the annuity is depleted?
+
+### 1 Solution
+\indent The change in value from month to month is given by
+\begin{align*}
+    \Delta a_n &= a_{n + 1} - a_n \\
+    \Delta a_n &= 0.01 \times a_{n - 1} - 1000
+\end{align*}
+
+Solving for $a_{n + 1}$ gives us the difference equation
+\begin{align*}
+    a_{n + 1} &= a_n + 0.01 \times a_n - 1000 \\
+    a_0 &= 50000
+\end{align*}
+
+We can write a function to calculate the value each month until it's depleted.
+
+```{r calculate-annuity}
+a0 <- 50000
+multiplier <- 0.01
+withdrawal <- 1000
+i = 1
+
+# Initialize an empty dataframe to store results
+antable <- data.frame(Month = integer(), Value = double())
+
+model1 <- function(an, multiplier, withdrawal) {
+  an1 <- an + multiplier*an - withdrawal
+  print(an1)
+}
+
+repeat {
+  an2 <- model1(a0, multiplier, withdrawal)
+  a0 <- an2
+  antable[i, ] <- c(i, an2)
+  
+  # Stop once the annuity reaches a negative value
+  if (an2 < 0){
+    break
+  }
+  i = i + 1
+}
+
+nrow(antable)
+```
+
+The annuity would lose all value in the 70th month.
+
+Graph of the annuity's value over time:
+
+```{r annuity-graph}
+ggplot(data = antable) +
+  geom_line(aes(x = Month, y = Value)) +
+  scale_x_continuous(breaks = round(seq(0, max(antable$Month), by = 5), 1))
+```
+
+## 2 (Page 17, exercise #9)
+The data in the accompanying table show the speed $n$ (in increments of 5 mph) of an automobile and the associated distance $a_n$ in feet required to stop it once the brakes are applied. For instance, $n = 6$ (representing $6 \times 5 = 30$ mph) requires a stopping distance of $a_6 = 47$ ft.
+
+a. Calculate and plot the change $\Delta a_n$ versus $n$. Does the graph reasonably approximate a linear relationship?
+
+b. Based on your conclusions in part (a), find a difference equation model for the stopping distance data. Test your model by plotting the errors in the predicted values against $n$. Discuss the appropriateness of the model.
+
+```{r question-two-table}
+# n <- 1:16
+# an <- c(3, 6, 11, 21, 32, 47, 65, 87, 112, 140, 171, 204, 241, 282, 325, 376)
+
+# ann <- rbind(n, an)
+# kable(ann, col.names = 1:16)
+
+twotable <- data.frame(n = 1:16, an = c(3, 6, 11, 21, 32, 47, 65, 87, 112, 140, 171, 204, 241, 282, 325, 376))
+kable(t(twotable))
+```
+
+### 2 Solution
+#### 2a
+
+$\Delta a_n = a_{n + 1} - a_n$
+
+```{r 2a}
+twotable$delta <- c(diff(twotable$an), NA)
+kable(t(twotable))
+
+ggplot(data = twotable) +
+  geom_smooth(aes(x = n, y = delta)) +
+  geom_point(aes(x = n, y = delta))
+```
+
+The graph indicates a linear relationship between $n$ and $\Delta a_n$.
+
+#### 2b
+Our difference equation model is given by
+\begin{equation*}
+a_{n + 1} = a_b + \Delta_n
+\end{equation*}
+
+We can find $\Delta_n$ by taking the slope of the graph, since we've already determined that there is a linear relationship between $n$ and $\Delta a_n$.
+
+```{r}
+slope <- round(lm(delta ~ n, data = twotable)$coefficients[2], 3)
+intercept <- round(lm(delta ~ n, data = twotable)$coefficients[1], 3)
+```
+
+The slope of the graph is `r slope`, and the intercept is `r intercept`.
+
+Our difference equation is now 
+\begin{equation*}
+a_{n + 1} = a_n + 3.246\times n - 1.105
+\end{equation*}
+
+```{r}
+twotable$predicted <- twotable$an + slope * twotable$n + intercept
+twotable %<>% mutate(predicted = lag(predicted))
+twotable$predicted[1] <- 3
+twotable$error <- twotable$an - twotable$predicted
+twotable
+```
+
+```{r}
+ggplot(data = twotable) +
+  geom_point(aes(x = n, y = error))
+```
+
+Since the errors do not appear to be normally distributed, one can conclude that this model would not be appropriate to estimate the stopping distance.
+
+## 3 (Page 34, exercise #13)
+Consider the spreading of a rumor through a company of 1000 employees, all working in the same building. We assume that the spreading of a rumor is similar to the spreading of a contagious disease (see Example 3, Section 1.2) in that the number of people hearing the rumor each day is proportional to the product of the number who have heard the rumor previously and the number who have not heard the rumor. This is given by
+\begin{equation*}
+r_{n + 1} = r_n + kr_n(1000 - r_n)
+\end{equation*}
+where $k$ is a parameter that depends on how fast the rumor spreads and $n$ is the number of days. Assume $k = 0.001$ and further assume that four people initially have heard the rumor. How soon will all 1000 employees have heard the rumor?
+
+### 3 Solution
+We are given $r_0 = 4$ and $k = 0.001$.
+
+```{r}
+r0 <- 4
+k <- 0.001
+employees <- 1000
+i <- 1
+
+rutable <- data.frame(Day = 0, Number = 4)
+
+rumodel <- function(rn, k, i) {
+  rn + k*rn*(1000-rn)
+}
+
+repeat {
+  r0 <- rumodel(r0, k, i)
+  rutable[i+1, ] <- c(i, r0)
+  
+  # 
+  if (r0 >= employees){
+    break
+  }
+  i = i + 1
+}
+
+rutable
+```
+
+After 12 days, the rumour will have spread to all employees throughout the office.
+
+## 4 (Page 55, exercise #6)
+An economist is interested in the variation of the price of a single product. It is observed that a high price for the product in the market attracts more suppliers. However, increasing the quantity of the product supplied tends to drive the price down. Over time, there is an interaction between price and supply. The economist has proposed the following model, where $P_n$ represents the price of the product at year $n$, and $Q_n$ represents the quantity. Find the equilibrium values for this system.
+
+\begin{align*}
+P_{n+1} &= P_n - 0.1(Q_n - 500) \\
+Q_{n+1} &= Q_n + 0.2(P_n - 100)
+\end{align*}
+
+a. Does the model make sense intuitively? What is the significance of the constants 100 and 500? Explain the significance of the signs of the constants 0:1 and 0.2.
+
+b. Test the initial conditions in the following table and predict the long-term behavior.
+
+```{r}
+kable(cbind(c("Case A", "Case B", "Case C", "Case D"), c(100, 200, 100, 100), c(500, 500, 600, 400)), col.names = c(NA, "Price", "Quantity"))
+```
+
+### 4a Solution
+The equilibrium is when we have $P = P_{n+1} = P_n$ and $Q = Q_{n+1} = Q_n$ simultaneously.
+After solving the system of equations, we find the equilibrium when $P = 100$ and $Q = 500$.
+
+These are the equilibrium values. The model makes sense, as it illustrates the relationship between quantity and price. As supply increases, price will drop; conversely, when supply decreases, price will rise.
+
+The sign of the coefficients explain the relationship. For example, in the first equation, the model estimates that the price decreases by $0.10 for every additional unit added to the market.
+
+### 4b Solution
+```{r}
+peq <- function(p, q) {
+  return(p - 0.1*(q - 500))
+}
+
+qeq <- function(q, p) {
+  return(q + 0.2*(p - 100))
+}
+```
+
+```{r}
+casetable <- data.frame(Year = integer(), Price = double(), Quantity = integer())
+
+  # Test over 100 years
+for (i in 1:100) {
+  casetable[i + 1, ] <- c(i, peq(100, 500), qeq(500, 100))
+}
+
+ggplot(data = casetable) +
+  geom_line(aes(x = Year, y = Quantity, colour = Quantity)) +
+  geom_line(aes(x = Year, y = Price, colour = Price)) +
+  labs(title = "Case 1: P = 100, Q = 500")
+```
+
+There is no change, since both variables are at their equilibrium.
+
+```{r}
+casetable2 <- data.frame(Year = 1, Price = 200, Quantity = 500)
+# casetable2 <- data.frame(Year = integer(), Price = double(), Quantity = integer())
+
+  # Test over 100 years
+for (i in 1:100) {
+  casetable2[i + 1, ] <- c(i, peq(casetable2[i, 2], casetable2[i, 3]), qeq(casetable2[i, 3], casetable2[i, 2]))
+}
+
+ggplot(data = casetable2) +
+  geom_line(aes(x = Year, y = Quantity, colour = Quantity)) +
+  geom_line(aes(x = Year, y = Price, colour = Price)) +
+  labs(title = "Case 2: P = 200, Q = 500")
+```
+
+```{r}
+casetable3 <- data.frame(Year = 1, Price = 100, Quantity = 600)
+
+  # Test over 100 years
+for (i in 1:100) {
+  casetable3[i + 1, ] <- c(i, peq(casetable3[i, 2], casetable3[i, 3]), qeq(casetable3[i, 3], casetable3[i, 2]))
+}
+
+ggplot(data = casetable3) +
+  geom_line(aes(x = Year, y = Quantity, colour = Quantity)) +
+  geom_line(aes(x = Year, y = Price, colour = Price)) +
+  labs(title = "Case 3: P = 100, Q = 600")
+```
+
+```{r}
+casetable4 <- data.frame(Year = 1, Price = 100, Quantity = 400)
+
+  # Test over 100 years
+for (i in 1:100) {
+  casetable4[i + 1, ] <- c(i, peq(casetable4[i, 2], casetable4[i, 3]), qeq(casetable4[i, 3], casetable4[i, 2]))
+}
+
+ggplot(data = casetable4) +
+  geom_line(aes(x = Year, y = Quantity, colour = Quantity)) +
+  geom_line(aes(x = Year, y = Price, colour = Price)) +
+  labs(title = "Case 4: P = 100, Q = 400")
+```
