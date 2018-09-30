@@ -1,0 +1,159 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={DATA 609 - Homework 2},
+            pdfauthor={Joshua Sturm},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{DATA 609 - Homework 2}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Joshua Sturm}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{September 14, 2018}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{chapter-2-problems}{%
+\section{Chapter 2 problems}\label{chapter-2-problems}}
+
+\hypertarget{page-69-exercise-11}{%
+\subsection{1 (Page 69, exercise \#11)}\label{page-69-exercise-11}}
+
+For the scenarios presented in problem 9-17, identify a problem worth
+studying and list the variables that affect the behavior you have
+identified. Which variables would be neglected completely? Which might
+be considered as constants initially? Can you identify any submodels you
+would want to study in detail? Identify any data you would want
+collected.
+
+\indent A company with a fleet of trucks faces increasing maintenance
+costs as the age and mileage of the trucks increase.
+
+\hypertarget{solution}{%
+\subsubsection{1 Solution}\label{solution}}
+
+The company may want to perform a study to determine whether it makes
+financial sense to continue sinking money into an aging asset, or
+whether it may be more economical to invest in a new fleet.
+
+Some possible variables that would need to be considered include:
+
+\begin{itemize}
+\item Fuel efficiency of current fleet
+\item Is it a buyer's or seller's market for used cars?
+\item Company's ability to secure low-interest financing
+\item Viability of renting / leasing vehicles
+\item Potential insurance savings by upgrading to newer, safer vehicles
+\item Routine / preventative maintenance
+\end{itemize}
+
+The company may opt to neglect the second variable, since resale value
+may not be an important factor, given that they got their use out of the
+vehicles, and they may need to upgrade regardless of the sunken cost.
+
+We could say that routine maintenance, such as oil changes, filter
+replacements, etc, are constant variables.
+
+We could break the model up into several parts, where the underlying
+question is whether to invest in and keep using the current fleet, or
+upgrade to a new one. The model can then be broken down further to
+determine whether the company should buy or lease their new vehicles.
+
+Suppose the company was exploring the feasibility of maintaining their
+current fleet, they would need to research costs of replacement parts
+(e.g.~transmission). They would also need to expect more frequent
+vehicle failures, which would lead to downtime and lost productivity.
+
+\hypertarget{page-79-exercise-11}{%
+\subsection{2 (Page 79, exercise \#11)}\label{page-79-exercise-11}}
+
+Determine whether the data set supports the stated proportionality
+model.
+
+\begin{equation*}
+y \ \ \alpha \ \ x^3
+\end{equation*}
+
+\begin{verbatim}
+##   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+## y    0    1    2    6   14   24   37   58   82   114
+## x    1    2    3    4    5    6    7    8    9    10
+\end{verbatim}
+
+
+\end{document}

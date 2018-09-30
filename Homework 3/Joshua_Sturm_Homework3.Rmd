@@ -1,0 +1,93 @@
+---
+title: "DATA 609 - Homework 3"
+author: "Joshua Sturm"
+date: "September 28, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+# Chapter 3 Problems
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+## 1 (Page 113, exercise #2)
+The following table gives the elongation $e$ in inches per inch (in./in.) for a given stress $S$ on a steel wire measured in pounds per square inch (lb/in$^2$). Test the model $e = c_1S$ by plotting the data. Estimate $c_1$ graphically.
+
+```{r}
+S <- c(5, seq(from = 10, to = 100, by = 10))
+e <- c(0, 19, 57, 94, 134, 173, 216, 256, 297, 343, 390)
+sedf <- data.frame(S,e)
+
+# Print table (dataframe)
+t(sedf)
+
+# Plot dataframe
+ggplot(data = sedf) +
+  geom_point(aes(x = S, y = e)) +
+  labs(title = "Elongation vs. Stress", x = "Stress", y = "Elongation")
+```
+
+We can estimate the slope using the first and 6th points.
+
+\begin{equation*}
+c_1 = \frac{173 - 0}{50 - 0} = `r 173/50`
+\end{equation*}
+
+## 2 (Page 121, exercise #2.a)
+Formulate the mathematical model that minimizes the largest deviation between the data and the line $y = ax + b$. If a computer is available, solve for the estimates of $a$ and $b$.
+
+```{r}
+x <- c(1.0, 2.3, 3.7, 4.2, 6.1, 7.0)
+y <- c(3.6, 3.0, 3.2, 5.1, 5.3, 6.8)
+
+devdf <- data.frame(x, y)
+t(devdf)
+
+# Plot dataframe
+ggplot(data = devdf) +
+  geom_point(aes(x = x, y = y))
+```
+
+We can fit a model using these data points to minimize the deviation.
+
+```{r}
+model <- lm(y ~ x, data = devdf)
+summary(model)
+```
+
+The largest deviation is `r max(abs(model$residuals))`.
+
+The equation for the line of best fit is 
+\begin{equation*}
+y = `r model$coefficients[2]`x + `r model$coefficients[1]`
+\end{equation*}
+
+Viewing the fitted model:
+
+```{r}
+ggplot(data = devdf, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+

@@ -1,0 +1,81 @@
+---
+title: "DATA 609 - Homework 2"
+author: "Joshua Sturm"
+date: "September 14, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+# Chapter 2 problems
+
+## 1 (Page 69, exercise #11)
+For the scenarios presented in problem 9-17, identify a problem worth studying and list the variables that affect the behavior you have identified. Which variables would be neglected completely? Which might be considered as constants initially? Can you identify any submodels you would want to study in detail? Identify any data you would want collected.
+
+\indent A company with a fleet of trucks faces increasing maintenance costs as the age and mileage of the trucks increase.
+
+### 1 Solution
+The company may want to perform a study to determine whether it makes financial sense to continue sinking money into an aging asset, or whether it may be more economical to invest in a new fleet.
+
+Some possible variables that would need to be considered include:
+\begin{itemize}
+\item Fuel efficiency of current fleet
+\item Is it a buyer's or seller's market for used cars?
+\item Company's ability to secure low-interest financing
+\item Viability of renting / leasing vehicles
+\item Potential insurance savings by upgrading to newer, safer vehicles
+\item Routine / preventative maintenance
+\end{itemize}
+
+The company may opt to neglect the second variable, since resale value may not be an important factor, given that they got their use out of the vehicles, and they may need to upgrade regardless of the sunken cost.
+
+We could say that routine maintenance, such as oil changes, filter replacements, etc, are constant variables.
+
+We could break the model up into several parts, where the underlying question is whether to invest in and keep using the current fleet, or upgrade to a new one. The model can then be broken down further to determine whether the company should buy or lease their new vehicles.
+
+Suppose the company was exploring the feasibility of maintaining their current fleet, they would need to research costs of replacement parts (e.g. transmission). They would also need to expect more frequent vehicle failures, which would lead to downtime and lost productivity. 
+
+## 2 (Page 79, exercise #11)
+Determine whether the data set supports the stated proportionality model.
+
+\begin{equation*}
+y \ \ \alpha \ \ x^3
+\end{equation*}
+
+```{r}
+x <- 1:10
+y <- c(0, 1, 2, 6, 14, 24, 37, 58, 82, 114)
+
+t(cbind(y, x))
+```
+
+To determine whether the variables are proportional, there must exist 
+\begin{equation*}
+y = k \cdot x^3
+\end{equation*}
+
+where $k$ is some constant. 
+
+
+
