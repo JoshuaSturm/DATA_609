@@ -1,0 +1,132 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={DATA 609 - Homework 4},
+            pdfauthor={Joshua Sturm},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{makecell}
+
+\title{DATA 609 - Homework 4}
+\author{Joshua Sturm}
+\date{October 3, 2018}
+
+\begin{document}
+\maketitle
+
+\hypertarget{chapter-5-problems}{%
+\section{Chapter 5 problems}\label{chapter-5-problems}}
+
+\hypertarget{page-191-exercise-3}{%
+\subsection{1 (Page 191, exercise \#3)}\label{page-191-exercise-3}}
+
+Using Monte Carlo simulation, write an algorithm to calculate an
+approximation to \(\pi\) by considering the number of random points
+selected inside the quarter circle
+
+\begin{equation*}
+Q : x^2 + y^2 = 1, \ \ x \geq 0, \ y \geq 0
+\end{equation*}
+
+where the quarter circle is taken to be inside the square
+
+\begin{equation*}
+S : 0 \leq x \leq 1 \ \text{and} \ 0 \leq y \leq 1
+\end{equation*}
+
+Use the equation \(\frac{\pi}{4} = \frac{\text{area}Q}{\text{area}S}\)
+
+\hypertarget{solution}{%
+\subsubsection{1 Solution}\label{solution}}
+
+\begin{table}[H]
+\centering\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{rrrr}
+\hiderowcolors
+\toprule
+\textbf{Sample Size} & \textbf{Actual $\pi$} & \textbf{Estimated $\pi$} & \textbf{Absolute difference}\\
+\midrule
+\showrowcolors
+10 & 3.141593 & 2.80000 & 0.3415927\\
+50 & 3.141593 & 3.12000 & 0.0215927\\
+100 & 3.141593 & 3.20000 & 0.0584073\\
+500 & 3.141593 & 3.19200 & 0.0504073\\
+1000 & 3.141593 & 3.12800 & 0.0135927\\
+\addlinespace
+5000 & 3.141593 & 3.11040 & 0.0311927\\
+10000 & 3.141593 & 3.13280 & 0.0087927\\
+50000 & 3.141593 & 3.13520 & 0.0063927\\
+100000 & 3.141593 & 3.14772 & 0.0061273\\
+\bottomrule
+\end{tabular}
+\rowcolors{2}{white}{white}
+\end{table}
+
+As the sample size increases, the simulation's accuracy improves.
+
+\hypertarget{page-194-exercise-1}{%
+\subsection{2 (Page 194, exercise \#1)}\label{page-194-exercise-1}}
+
+Use the middle-square method to generate \begin{align*}
+&a. \text{ 10 random numbers using } x_0 = 1009.\\
+&b. \text{ 20 random numbers using } x_0 = 653217.\\
+&c. \text{ 15 random numbers using } x_0 = 3043.\\
+&d. \text{ Comment about the results of each sequence. Was there cycling? Did each sequence degenerate rapidly?}
+\end{align*}
+
+\hypertarget{solution-1}{%
+\subsubsection{2 Solution}\label{solution-1}}
+
+\end{document}

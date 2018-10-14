@@ -1,0 +1,137 @@
+---
+title: "DATA 609 - Homework 4"
+author: "Joshua Sturm"
+date: "October 3, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+    template: default.latex
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+header-includes:
+   - \usepackage{float}
+   - \usepackage[table]{xcolor}
+   - \usepackage{booktabs}
+   - \usepackage{makecell}
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(stringr)
+```
+
+# Chapter 5 problems
+
+## 1 (Page 191, exercise #3)
+Using Monte Carlo simulation, write an algorithm to calculate an approximation to $\pi$ by considering the number of random points selected inside the quarter circle
+
+\begin{equation*}
+Q : x^2 + y^2 = 1, \ \ x \geq 0, \ y \geq 0
+\end{equation*}
+
+where the quarter circle is taken to be inside the square
+
+\begin{equation*}
+S : 0 \leq x \leq 1 \ \text{and} \ 0 \leq y \leq 1
+\end{equation*}
+
+Use the equation $\frac{\pi}{4} = \frac{\text{area}Q}{\text{area}S}$
+
+### 1 Solution
+```{r}
+options(scipen = 999)
+set.seed(76)
+# Begin by creating a function to calculate n random points between 0 and 1
+pi_montcarl <- function(n){
+  
+  # User defines n number of x and y points to generate randomly between 0 and 1
+  
+  x_gen <- runif(n, 0, 1)
+  y_gen <- runif(n, 0, 1)
+  
+  # Given pi = (area Q / area S) * 4, we can plug in the equation for Q
+  # Sum(x^2 + y^2 / n * 4)
+  
+  Q <- x_gen^2 + y_gen^2 <= 1
+  
+  return(sum(Q) / n * 4)
+}
+
+# We can create a vector of sample sizes to build a table
+n_vector <- c(10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000)
+
+# Apply function to vector of sample sizes
+pi_est <- sapply(n_vector, pi_montcarl)
+
+# Build table of results
+kable(cbind(n_vector, pi, pi_est, abs(pi - pi_est)),
+      col.names = c('Sample Size', 'Actual $\\pi$', 'Estimated $\\pi$', 'Absolute difference'),
+      "latex", booktabs = T, escape = F) %>%
+  row_spec(0, bold = T) %>%
+  kable_styling(latex_options = "striped")
+```
+
+As the sample size increases, the simulation's accuracy improves.
+
+## 2 (Page 194, exercise #1)
+Use the middle-square method to generate
+\begin{align*}
+&a. \text{ 10 random numbers using } x_0 = 1009.\\
+&b. \text{ 20 random numbers using } x_0 = 653217.\\
+&c. \text{ 15 random numbers using } x_0 = 3043.\\
+&d. \text{ Comment about the results of each sequence. Was there cycling? Did each sequence degenerate rapidly?}
+\end{align*}
+
+### 2 Solution
+```{r}
+# Function to generate random numbers using the middle-square method
+msq <- function(seed, n){
+  
+  # Function takes two arguments - n iterations and a starting seed number
+  
+  # initialize vector with seed value
+  val_list <- vector("integer", n)
+  val_list[1] <- seed
+  
+  i <- 2
+  while(i <= n){
+    
+    # If seed^2 has an odd number of digits, add a leading 0
+    # if((str_length(seed^2) %% 2 != 0)){
+    #   seedsq <- paste0(0, seed^2)
+    # } else{
+    #   seedsq <- seed^2
+    # }
+    
+    # I realized my mistake with the above code - there always needs to be 2*seed digits
+    # I can use the str_pad() function to add as many zeros as I want
+    seedsq <- as.character(str_pad(string = as.character(seed^2), width = 2*str_length(val_list[1]), side = 'left', pad = '0'))
+    
+    midseedsq <- as.character(str_sub(seedsq, start = ((str_length(seedsq) / 2) - (str_length(seed) / 2) + 1),  end = (str_length(seedsq) / 2) + (str_length(seed) / 2)))
+    # midseedsq <- str_sub(seedsq, start = str_length(seed) - (str_length(seed) / 2) + 1, end = str_length(seed) + (str_length(seed) / 2))
+    
+    val_list[i] <- as.integer(midseedsq)
+    
+    seed <- as.integer(midseedsq)
+    i <- i + 1
+  }
+  return(val_list)
+}
+```
+
