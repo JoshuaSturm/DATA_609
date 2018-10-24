@@ -1,0 +1,128 @@
+---
+title: "DATA 609 - Homework 5"
+author: "Joshua Sturm"
+date: "October 15, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(markovchain)
+```
+
+# Chapter 6 problems
+
+## 1 (Page 228, exercise #1)
+Consider a model for the long-term dining behavior of the students at College USA. It is found that 25% of the students who eat at the college's Grease Dining Hall return to eat there again, whereas those who eat at Sweet Dining Hall have a 93% return rate. These are the only two dining halls available on campus, and assume that all students eat at one of these halls. Formulate a model to solve for the long-term percentage of students eating at each hall.
+
+### 1 Solution
+The transitional matrix is
+
+```{r}
+# trans_mat <- data.frame("1" = c("Grease", "Sweet"), "Grease" = c("0.25", "0.07"), "Sweet" = c("0.75", "0.93"))
+# names(trans_mat)[1] <- ""
+# kable(trans_mat, "latex", booktabs = T) %>%
+#   kable_styling(latex_options = "striped")
+trans_mat <- matrix(c(0.25, 0.75, 0.07, 0.93), nrow = 2, byrow = T)
+
+markov_chain <- new("markovchain", transitionMatrix = trans_mat, states = c("Grease", "Sweet"), name = "Markov Chain 1")
+markov_chain
+```
+
+And the markov chain is show plotted below:
+
+```{r}
+plot(markov_chain)
+```
+
+Let $G_n$ = the percentage of students who eat at Grease Dining Hall at the end of period $n$. \\
+Let $S_n$ = the percentage of students who eat at Sweet DininG Hall at the end of period $n$.
+
+Then,
+
+$G_{n+1} = 0.25G_n + 0.07S_n$ \\
+$S_{n+1} = 0.75G_n + 0.93S_n$
+
+We can visualize the model's prediction over time.
+
+```{r}
+# Begin by defining the functions for each dining hall
+grease <- function(g, s){
+  return(0.25 * g + 0.07 * s)
+}
+
+sweet <- function(g, s){
+  return(0.75 * g + 0.93 * s)
+}
+
+# For simplicity's sake, begin with each dining hall having 50% of the student population
+# We'll see if the model converges within 10 timesteps
+df <- data.frame(n = 0:10, Grease = 0.5, Sweet = 0.5)
+
+# Apply the function at each timestep
+for(i in 1:10){
+  df$Grease[i+1] <- round(grease(df$Grease[i], df$Sweet[i]), 7)
+  df$Sweet[i+1] <- round(sweet(df$Grease[i], df$Sweet[i]), 7)
+}
+df
+```
+
+We can see the model converges after 10 timesteps.
+
+To view this graphically:
+
+```{r}
+dfmelt <- df %>%
+  gather(key = DiningHall, value = value, Grease, Sweet)
+
+ggplot(data = dfmelt, aes(x = n, y = value, colour = DiningHall)) +
+  geom_line() +
+  scale_x_continuous(breaks = 0:10)
+```
+
+## 2 (Page 232, exercise #1)
+Consider a stereo with CD player, FM-AM radio tuner, speakers (dual), and power amplifier (PA) components, as displayed with the reliabilities shown in Figure 6.11. Determine the system's reliability. What assumptions are required in your model?
+
+![](image2.png)
+
+### 2 Solution
+We can divide it into three parts: 
+ - The PA system
+ - The CD and FM-AM radio
+ - Speaker 1 and speaker 2
+ 
+Let $R_1, R_2,$ and $R_3$ represent the above three parts, respectively.
+
+Then,
+
+\begin{align*}
+R_1 &= 0.95 \\
+R_2 &= R_2(1) + R_2(2) - (R_2(1)\times R_2(2)) = 0.98 + 0.97 - (0.98\times 0.97) = `r 0.98 + 0.97 - (0.98 * 0.97)` \\
+R_3 &= R_3(1) + R_3(2) - (R_3(1)\times R_3(2)) = 0.99 + 0.99 - (0.99\times 0.99) = `r 0.99 + 0.99 - (0.99 * 0.99)`
+\end{align*}
+
+The reliability of the system as whole is $R_1 \times R_2 \times R_3$.
+
+$R = 0.95 \times 0.9994 \times 0.9999 =$ `r 0.95 * 0.9994 * 0.9999`.
+
+References:
+ - https://rpubs.com/JanpuHou/326048
+ - https://www.datacamp.com/community/tutorials/markov-chain-analysis-r
