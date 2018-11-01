@@ -1,0 +1,178 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={DATA 609 - Homework 6},
+            pdfauthor={Joshua Sturm},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{DATA 609 - Homework 6}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Joshua Sturm}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{October 25, 2018}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{chapter-7-problems}{%
+\section{Chapter 7 Problems}\label{chapter-7-problems}}
+
+\hypertarget{page-251-exercise-2}{%
+\subsection{1 (Page 251, exercise \#2)}\label{page-251-exercise-2}}
+
+Nutritional Requirements-A rancher has determined that the minimum
+weekly nutritional requirements for an average-sized horse include 40 lb
+of protein, 20 lb of carbohydrates, and 45 lb of roughage. These are
+obtained from the following sources in varying amounts at the prices
+indicated:
+
+\begin{longtable}[]{@{}lrrrl@{}}
+\toprule
+& Protein & Carbohydrates & Roughage & Cost\tabularnewline
+\midrule
+\endhead
+Hay & 0.5 & 2.0 & 5.0 & 1.8\tabularnewline
+Oats & 1.0 & 4.0 & 2.0 & 3.5\tabularnewline
+Feeding blocks & 2.0 & 0.5 & 1.0 & 0.4\tabularnewline
+High-protein concentrate & 6.0 & 1.0 & 2.5 & 1\tabularnewline
+Requirements per horse & 40.0 & 20.0 & 45.0 &\tabularnewline
+\bottomrule
+\end{longtable}
+
+Formulate a mathematical model to determine how to meet the minimum
+nutritional requirements at minimum cost.
+
+\hypertarget{solution}{%
+\subsubsection{1 Solution}\label{solution}}
+
+We are given four variables: \begin{align*}
+x_1 &= \text{Hay} \\
+x_2 &= \text{Oats} \\
+x_3 &= \text{Feeding blocks} \\
+x_4 &= \text{High-Protein concentrate}
+\end{align*}
+
+Our cost function is: \[
+1.80x_1 + 3.5x_2 + 0.4x_3 + 1.0x_4
+\]
+
+And we want to minimize it, subject to the constraints: \begin{align*}
+0.5x_1 + x_2 + 2.0x_3 + 6.0x_4 &\leq 40.0 \ \ \text(Protein) \\
+2.0x_1 + 4.0x_2 + 0.5x_3 + 1.0x_4 &\leq 20.0 \ \ \text(Carbohydrates) \\
+5.0x_1 + 2.0x_2 + 1.0x_3 + 2.5x_4 &\leq 45.0 \ \ \text(Roughage)
+\end{align*}
+
+\hypertarget{page-284-exercise-1}{%
+\subsection{2 (Page 284, exercise \#1)}\label{page-284-exercise-1}}
+
+For the example problem in this section, determine the sensitivity of
+the optimal solution to a change in \(c_2\) using the objective function
+\(25x_1 + c_2x_2\).
+
+\hypertarget{solution-1}{%
+\subsubsection{2 Solution}\label{solution-1}}
+
+Let \(Z = 25x_1 + c_2x_2\).
+
+Then \(x_1 = \frac{-c_2}{25}\).
+
+The slope of the lumber constraint is \(\frac{-2}{3}\), and the slope of
+the labour constraint is \(\frac{-5}{4}\).
+
+Thus, the range of values for which the current extreme point remains
+optimal is given by the inequality
+
+\[
+\frac{-5}{4} \leq \frac{-c_2}{25} \leq \frac{-2}{3}
+\]
+
+\[
+\frac{50}{3} \leq c_2 \leq \frac{125}{4}
+\]
+
+\hypertarget{resources-used}{%
+\section{Resources used:}\label{resources-used}}
+
+\begin{itemize}
+\tightlist
+\item
+  \url{http://sites.fas.harvard.edu/~apm121/lectures/lec8-hq.pdf}
+\end{itemize}
+
+
+\end{document}

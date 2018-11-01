@@ -1,0 +1,97 @@
+---
+title: "DATA 609 - Homework 6"
+author: "Joshua Sturm"
+date: "October 25, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+# Chapter 7 Problems
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+## 1 (Page 251, exercise #2)
+Nutritional Requirements-A rancher has determined that the minimum weekly nutritional requirements for an average-sized horse include 40 lb of protein, 20 lb of carbohydrates, and 45 lb of roughage. These are obtained from the following sources in varying amounts at the prices indicated:
+
+```{r}
+c1 <- c("Hay", "Oats", "Feeding blocks", "High-protein concentrate", "Requirements per horse")
+Protein <- c(0.5, 1.0, 2.0, 6.0, 40.0)
+Carbohydrates <- c(2.0, 4.0, 0.5, 1.0, 20.0)
+Roughage <- c(5.0, 2.0, 1.0, 2.5, 45.0)
+Cost <- c(1.80, 3.50, 0.40, 1.00, "")
+
+reqdf <- data.frame(c1 = c1, Protein = Protein, Carbohydrates = Carbohydrates, Roughage = Roughage, Cost = Cost)
+names(reqdf)[1] <- ""
+
+kable(reqdf)
+```
+
+Formulate a mathematical model to determine how to meet the minimum nutritional requirements at minimum cost.
+
+### 1 Solution
+We are given four variables:
+\begin{align*}
+x_1 &= \text{Hay} \\
+x_2 &= \text{Oats} \\
+x_3 &= \text{Feeding blocks} \\
+x_4 &= \text{High-Protein concentrate}
+\end{align*}
+
+Our cost function is:
+$$
+1.80x_1 + 3.5x_2 + 0.4x_3 + 1.0x_4
+$$
+
+And we want to minimize it, subject to the constraints:
+\begin{align*}
+0.5x_1 + x_2 + 2.0x_3 + 6.0x_4 &\leq 40.0 \ \ \text(Protein) \\
+2.0x_1 + 4.0x_2 + 0.5x_3 + 1.0x_4 &\leq 20.0 \ \ \text(Carbohydrates) \\
+5.0x_1 + 2.0x_2 + 1.0x_3 + 2.5x_4 &\leq 45.0 \ \ \text(Roughage)
+\end{align*}
+
+## 2 (Page 284, exercise #1)
+For the example problem in this section, determine the sensitivity of the optimal solution to a change in $c_2$ using the objective function $25x_1 + c_2x_2$.
+
+### 2 Solution
+Let $Z = 25x_1 + c_2x_2$.
+
+Then $x_1 = \frac{-c_2}{25}$.
+
+The slope of the lumber constraint is $\frac{-2}{3}$, and the slope of the labour constraint is $\frac{-5}{4}$.
+
+Thus, the range of values for which the current extreme point remains optimal is given by the inequality
+
+$$
+\frac{-5}{4} \leq \frac{-c_2}{25} \leq \frac{-2}{3}
+$$
+
+$$
+\frac{50}{3} \leq c_2 \leq \frac{125}{4}
+$$
+
+
+
+# Resources used:
+
+- http://sites.fas.harvard.edu/~apm121/lectures/lec8-hq.pdf
