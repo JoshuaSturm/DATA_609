@@ -1,0 +1,89 @@
+---
+title: "DATA 609 - Homework 7"
+author: "Joshua Sturm"
+date: "November 13, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T, cache = T)
+```
+
+# Chapter 8 Problems
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+## 1 (Page 304, exercise #2)
+The bridges and land masses of a certain city can be modeled with graph $G$ in Figure 8.7.
+
+![](figure87.png)
+
+a. Is $G$ Eulerian? Why or why not?
+
+b. Suppose we relax the requirement of the walk so that the walker need not start and end at the same land mass but still must traverse every bridge exactly once. Is this type of walk possible in a city modeled by the graph in Figure 8.7? If so, how? If not, why not?
+
+### 1a Solution
+A graph is Eulerian if:
+ -  Every path is reachable and connected
+ - Each vertex has an even number of connections
+ 
+Graph $G$ satisfies the first condition, but fails the second - vertices 2 and 5 have an odd number of connections (3).
+
+### 1b Solution
+Since the graph has two vertices with an odd number of connections, this would be possible. \
+An example would be:
+
+$$
+2 \to 1 \to \to 3 \to 2 \to 4 \to 3 \to 5 \to 4 \to 6 \to 5
+$$
+
+## 2 (Page 307, exercise #1)
+
+![](figure811.png)
+
+a. Write down the set of edges $E(G)$.
+
+b. Which edges are incident with vertex $b$?
+
+c. Which vertices are adjacent to vertex $c$?
+
+d. Compute $deg(a)$.
+
+e. Compute $|E(G)|$.
+
+### 2a Solution
+\begin{center}
+$E(G) = \{ab, ae, af, bc, bd, cd, de, df, ef\}$.
+\end{center}
+
+### 2b Solution
+Edges $ab, bc, \text{and } bd$.
+
+### 2c Solution
+Vertices $b$ and $d$ are adjacent to vertex $c$.
+
+### 2d Solution
+The degree of a vertex is the number of incidences between that vertex and an edge.\
+$deg(a) = 3$.
+
+### 2e Solution
+$|E(G)|$, or the cardinality of $E(G)$, is the number of elements in the set $E(G)$. \
+From our answer in part 2a, we can see that $|E(G)| = 9$.
