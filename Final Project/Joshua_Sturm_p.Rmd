@@ -1,0 +1,32 @@
+---
+title: "DATA 609 - Final Project Proposal"
+author: "Joshua Sturm"
+date: "November 12, 2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document:
+    toc: yes
+  html_document:
+    code_folding: show
+    highlight: pygments
+    smart: no
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+always_allow_html: yes
+---
+
+## Mission Statement
+Airlines have made headlines in recent months due to issues with 'bumping' passengers from their flights. In this project, I plan to run a Monte Carlo simulation to predict the optimal number of passengers booked for a given flight.
+
+## Motivation
+Upon reviewing the topics covered thus far during the semester, I felt that Monte Carlo simulations was the one I felt the least comfortable with. To better understand this important technique, I decided to focus on this area.
+
+The subject for this project was inspired by Chapter 5.5, project 3 of the textbook, (as well as helpful guidance from the professor).
+
+## Data
+I will attempt to source most of the data, such as ticket costs, destinations, etc, from actual airlines. I haven't yet been able to find much during my preliminary research, however. In the event that I'm unable to procure any factual numbers, I will make up my own, trying to be as accurate as possible in line with the project's defined assumptions.
+
+## Tools
+This project will likely be done in R, although I may decide to do it in Python if I find the time to gain a sufficient foothold in the language.
